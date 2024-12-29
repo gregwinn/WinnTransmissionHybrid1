@@ -207,7 +207,6 @@ function onTick()
 
     output.setNumber(4, currentClutchOutput)
     output.setNumber(5, currentGear)
-    output.setNumber(6, engRPS)
 end
 
 function onDraw()
