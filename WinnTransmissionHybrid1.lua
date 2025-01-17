@@ -67,16 +67,14 @@ require("Helpers.base")
 ---- 29: Throttle: Number
 
 -- Properties INPUT
--- 20: Number of gears (1-2)
+-- 20: Number of gears (1-10)
 -- 21: Reverse Gearbox (1 or 2)
 -- 22: Set Gear up (bolean)
 -- 23: Set Gear down (boloan)
 
 ticks = 0
 local currentGear = 0
-local currentClutch = 0
 local currentClutchOutput = 0
-local currentDriveMode = 0
 driveModeCounter = newUpDownCounter(0, -1, 3, 1)
 clutchCounter = newUpDownCounter(0, 0, 1, 0.008)
 function onTick()
@@ -85,7 +83,7 @@ function onTick()
     engRPS = input.getNumber(27)
     idleRPS = input.getNumber(28)
     throttle = input.getNumber(29)
-    nGears = input.getNumber(20)
+    nGears = input.getNumber(20) or 8
     gearUp = input.getBool(22)
     gearDown = input.getBool(23)
 
@@ -114,18 +112,13 @@ function onTick()
         
         currentClutchOutput = clutchCounter.getValue(clutchCounter)
 
-        -- Gearbox
-        -- 1 : 1
-        -- 2 : 2
-        -- 3 : 6
-        -- 4 : 7
         if currentGear == 1 then
             -- All Gearboxes off
-            output.setBool(1, false) -- Gearbox 1
-            output.setBool(2, false) -- Gearbox 2
-            output.setBool(6, false) -- Gearbox 3
-            output.setBool(7, false) -- Gearbox 4
-            output.setBool(9, false) -- Gearbox 5
+            output.setBool(1, false) -- Gearbox 1 <<
+            output.setBool(2, false) -- Gearbox 2 <<
+            output.setBool(6, false) -- Gearbox 3 >>
+            output.setBool(7, false) -- Gearbox 4 >>
+            output.setBool(9, false) -- Gearbox 5 >>
             output.setBool(3, false) -- Data Out (set true for reverse)
             output.setBool(8, false) -- Gearbox Reverse
         elseif currentGear == 2 then
@@ -165,6 +158,22 @@ function onTick()
             output.setBool(2, true) -- Gearbox 2
             output.setBool(6, true) -- Gearbox 3
             output.setBool(7, false) -- Gearbox 4
+            output.setBool(9, true) -- Gearbox 5
+            output.setBool(3, false) -- Data Out (set true for reverse)
+            output.setBool(8, false) -- Gearbox Reverse
+        elseif currentGear == 7 then
+            output.setBool(1, true) -- Gearbox 1
+            output.setBool(2, false) -- Gearbox 2
+            output.setBool(6, true) -- Gearbox 3
+            output.setBool(7, true) -- Gearbox 4
+            output.setBool(9, false) -- Gearbox 5
+            output.setBool(3, false) -- Data Out (set true for reverse)
+            output.setBool(8, false) -- Gearbox Reverse
+        elseif currentGear == 8 then
+            output.setBool(1, true) -- Gearbox 1
+            output.setBool(2, true) -- Gearbox 2
+            output.setBool(6, false) -- Gearbox 3
+            output.setBool(7, true) -- Gearbox 4
             output.setBool(9, true) -- Gearbox 5
             output.setBool(3, false) -- Data Out (set true for reverse)
             output.setBool(8, false) -- Gearbox Reverse
